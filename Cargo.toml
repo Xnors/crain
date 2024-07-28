@@ -1,0 +1,10 @@
+[package]
+name = "crain"
+version = "0.1.0"
+edition = "2021"
+authors = ["BaiChuanByte <baichuanbyte@tuta.io>"]
+
+description = "A Brainfuck compiler/interpreter/tool"
+license = "MIT"
+
+[dependencies]
