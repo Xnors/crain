@@ -8,3 +8,4 @@ description = "A Brainfuck compiler/interpreter/tool"
 license = "MIT"
 
 [dependencies]
+thiserror = "1.0"
