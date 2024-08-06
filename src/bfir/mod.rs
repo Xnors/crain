@@ -1,4 +1,7 @@
-use std::ops::Add;
+pub mod celltype;
+
+pub use celltype::BFCell;
+
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum BFCode<T: BFCell> {
@@ -10,7 +13,5 @@ pub enum BFCode<T: BFCell> {
     Output,             // .
     Jz(usize),          // [
     Jnz(usize),         // ]
-
 }
 
-pub trait BFCell: Add<Output = Self> + Copy + From<i32> {}
