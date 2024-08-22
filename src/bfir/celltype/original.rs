@@ -1,6 +1,13 @@
 use super::*;
 
 
+pub type Cell8 = u8;
+pub type Cell16 = u16;
+pub type Cell32 = u32;
+pub type Cell64 = u64;
+pub type Cell128 = u128;
+
+
 macro_rules! auto_impl {
     ($method:ident, $t:ty) => {
         #[inline]
@@ -41,9 +48,9 @@ macro_rules! impl_bfcell {
 }
 
 
-impl_bfcell!(u8, 8);
-impl_bfcell!(u16, 16);
-impl_bfcell!(u32, 32);
-impl_bfcell!(u64, 64);
-impl_bfcell!(u128, 128);
+impl_bfcell!(Cell8, 8);
+impl_bfcell!(Cell16, 16);
+impl_bfcell!(Cell32, 32);
+impl_bfcell!(Cell64, 64);
+impl_bfcell!(Cell128, 128);
 
