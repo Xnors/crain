@@ -1,49 +1,34 @@
+mod original;
+
+
+pub use original::*;
+
 use core::ops::{
     Add,
     Sub,
 };
 
-use num_traits::identities::{
-    One,
-    Zero
-};
 
-use num_traits::ops::{
-    overflowing::{
-        OverflowingAdd,
-        OverflowingSub
-    },
-
-    saturating::{
-        SaturatingAdd,
-        SaturatingSub
-    },
-
-    wrapping::{
-        WrappingAdd,
-        WrappingSub
-    }
-};
-
-
-pub trait BFCell:
+pub trait BFCell<Rhs = Self, Output = Self>:
     Copy +
     Eq +
-    Zero +
-    One +
-    Add<Self, Output = Self> +
-    Sub<Self, Output = Self> +
-    OverflowingAdd +
-    OverflowingSub +
-    SaturatingAdd +
-    SaturatingSub +
-    WrappingAdd +
-    WrappingSub {}
+    Add<Rhs, Output = Output> +
+    Sub<Rhs, Output = Output> {
 
 
-impl BFCell for u8   {}
-impl BFCell for u16  {}
-impl BFCell for u32  {}
-impl BFCell for u64  {}
-impl BFCell for u128 {}
+    fn overflowing_add(self, rhs: Rhs) -> (Output, bool);
+    fn overflowing_sub(self, rhs: Rhs) -> (Output, bool);
+
+    fn saturating_add(self, rhs: Rhs) -> Output;
+    fn saturating_sub(self, rhs: Rhs) -> Output;
+
+    fn wrapping_add(self, rhs: Rhs) -> Output;
+    fn wrapping_sub(self, rhs: Rhs) -> Output;
+
+    fn zero() -> Output;
+    fn one()  -> Output;
+    fn min()  -> Output { Self::zero() }
+    fn max()  -> Output;
+    fn size() -> usize;
+}
 
