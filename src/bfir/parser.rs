@@ -92,3 +92,89 @@ impl<T> BFCode<T>
     }
 }
 
+
+
+#[cfg(test)]
+mod tests {
+    use std::io::BufReader;
+    use crate::bfir::BFCode::*;
+    use super::*;
+
+    #[test]
+    fn test_bfcode_parse() {
+        let error_func = |e| panic!("Parse Error: {}", e);
+        let ok_func    = |v| v;
+
+        // test the parse function
+        let source_codes = BufReader::new("+-<>,.[]".as_bytes());
+        let parsed_codes = BFCode::<u8>::parse(source_codes).map_or_else(
+            error_func,
+            ok_func
+        );
+
+        assert_eq!(
+            parsed_codes,
+            vec![
+                AddCell(1),
+                SubCell(1),
+                LeftShift(1),
+                RightShift(1),
+                Input,
+                Output,
+                Jz(7),
+                Jnz(6),
+            ]
+        );
+
+        // test the merge function
+        let source_codes = BufReader::new("-<<<+++--><++>>>".as_bytes());
+        let parsed_codes = BFCode::<u8>::parse(source_codes).map_or_else(
+            error_func,
+            ok_func
+        );
+
+        assert_eq!(
+            parsed_codes,
+            vec![
+                SubCell(1),
+                LeftShift(3),
+                AddCell(3),
+                SubCell(2),
+                RightShift(1),
+                LeftShift(1),
+                AddCell(2),
+                RightShift(3),
+            ]
+        );
+
+        // test the brackets match function
+        let source_codes = BufReader::new("[[][[[][[]][]]]]".as_bytes());
+        let parsed_codes = BFCode::<u8>::parse(source_codes).map_or_else(
+            error_func,
+            ok_func
+        );
+
+        assert_eq!(
+            parsed_codes,
+            vec![
+                Jz(15),   // 0
+                Jz(2),    // 1
+                Jnz(1),   // 2
+                Jz(14),   // 3
+                Jz(13),   // 4
+                Jz(6),    // 5
+                Jnz(5),   // 6
+                Jz(10),   // 7
+                Jz(9),    // 8
+                Jnz(8),   // 9
+                Jnz(7),   // 10
+                Jz(12),   // 11
+                Jnz(11),  // 12
+                Jnz(4),   // 13
+                Jnz(3),   // 14
+                Jnz(0),   // 15
+            ]
+        );
+    }
+}
+
